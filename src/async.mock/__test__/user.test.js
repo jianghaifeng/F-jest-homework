@@ -1,4 +1,6 @@
+import mockAxios from "axios";
 import { register } from "../user";
+import { verifyUsername } from "../verify";
 
 jest.mock("../verify");
 jest.mock("axios");
@@ -6,9 +8,23 @@ jest.mock("axios");
 describe("register", () => {
   test("should post user when validated", () => {
     // TODO 19: add test here
+    const mockedUserName = "mocked username";
+    const mockedPassword = "mocked password";
+
+    register(mockedUserName, mockedPassword);
+
+    expect(mockAxios.post).toHaveBeenCalled();
   });
 
-  test("should reject with Error when username is invalid", () => {
+  test("should reject with Error when username is invalid", async () => {
     // TODO 20: add test here
+    const mockedUserName = "mocked username";
+    const mockedPassword = "mocked password";
+
+    verifyUsername.mockImplementation(() => false);
+
+    await expect(register(mockedUserName, mockedPassword)).rejects.toEqual(
+      expect.any(Error)
+    );
   });
 });
